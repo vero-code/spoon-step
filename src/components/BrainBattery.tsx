@@ -98,7 +98,7 @@ export const BrainBattery: React.FC<BrainBatteryProps> = ({
         <div className="flex items-center gap-2">
           <div className="text-right">
             <div className="flex items-center justify-end gap-1.5">
-              <Utensils className="w-4 h-4 text-teal-400" />
+              <span className="text-xs">🥄</span>
               <span className="font-pixel text-xs font-bold text-neutral-100">
                 {activeSpoons}/{totalSpoons}
               </span>

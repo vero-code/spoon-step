@@ -286,6 +286,13 @@ function App() {
         </div>
       </main>
 
+      {/* Disclaimer */}
+      <aside aria-label="Disclaimer" className="w-full max-w-2xl mx-auto px-4 pb-2 text-center">
+        <p className="text-[11px] text-neutral-500 font-mono leading-relaxed">
+          <span className="text-neutral-400 font-semibold">Disclaimer:</span> SpoonStep is a gamified cognitive scaffold powered by Google Gemini, designed for supportive and educational purposes. It does not provide medical, psychiatric, or clinical advice.
+        </p>
+      </aside>
+
       <Footer />
 
       <SpoonTheoryModal

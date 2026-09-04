@@ -5,6 +5,7 @@ import { SpoonTheoryModal } from './components/SpoonTheoryModal';
 import { ActionManager } from './components/ActionManager.tsx';
 import { BrainBattery } from './components/BrainBattery.tsx';
 import { EphemeralConfessional } from './components/EphemeralConfessional.tsx';
+import { CognitiveRest } from './components/CognitiveRest.tsx';
 import type { AppState, GamePlayerStats, FloatingReward } from './types';
 import { soundFx } from './services/soundFx';
 import { decomposeTaskWithGemini } from './services/gemini';
@@ -269,7 +270,18 @@ function App() {
               </motion.div>
             )}
 
-            {/* Rest */}
+            {appState === 'REST' && (
+              <motion.div
+                key="state-rest"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                className="w-full"
+              >
+                <CognitiveRest onResetApp={handleResetApp} />
+              </motion.div>
+            )}
           </AnimatePresence>
         </div>
       </main>

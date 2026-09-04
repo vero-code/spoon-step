@@ -6,6 +6,7 @@ import { ActionManager } from './components/ActionManager.tsx';
 import { BrainBattery } from './components/BrainBattery.tsx';
 import type { AppState } from './types';
 import { soundFx } from './services/soundFx';
+import { decomposeTaskWithGemini } from './services/gemini';
 import { AnimatePresence, motion } from 'motion/react';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
   const [stepIndex, setStepIndex] = useState<number>(0);
   const [isLoadingStep, setIsLoadingStep] = useState<boolean>(false);
   const [stepsCompleted, setStepsCompleted] = useState<number>(0);
+  const [questSteps, setQuestSteps] = useState<string[]>([]);
 
   const [showTheoryModal, setShowTheoryModal] = useState<boolean>(false);
 
@@ -37,7 +39,17 @@ function App() {
     setStepIndex(0);
     setIsLoadingStep(true);
 
-    setCurrentStep('first step');
+    try {
+      // Request to Gemini
+      const steps = await decomposeTaskWithGemini(task);
+      setQuestSteps(steps);
+      setCurrentStep(steps[0]);
+    } catch (error) {
+      console.error('Gemini error:', error);
+      alert('Error: ' + (error instanceof Error ? error.message : String(error)));
+    } finally {
+      setIsLoadingStep(false);
+    }
   };
 
   // Reset entire application for hackathon testing
@@ -86,6 +98,7 @@ function App() {
                   stepIndex={stepIndex}
                   isLoadingStep={isLoadingStep}
                   onStartTask={handleStartTask}
+                  questSteps={questSteps}
                 />
               </motion.div>
             )}

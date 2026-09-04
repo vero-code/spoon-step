@@ -15,6 +15,7 @@ interface ActionManagerProps {
   stepIndex: number;
   isLoadingStep: boolean;
   onStartTask: (task: string) => void;
+  questSteps: string[];
 }
 
 export const ActionManager: React.FC<ActionManagerProps> = ({
@@ -24,8 +25,10 @@ export const ActionManager: React.FC<ActionManagerProps> = ({
   stepIndex,
   isLoadingStep,
   onStartTask,
+  questSteps,
 }) => {
   const [inputValue, setInputValue] = useState('');
+  const [showRoadmap, setShowRoadmap] = useState<boolean>(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -154,6 +157,57 @@ export const ActionManager: React.FC<ActionManagerProps> = ({
             </div>
 
             {/* TODO: Action Buttons */}
+            {/* Show Roadmap */}
+            {questSteps && questSteps.length > 0 && (
+              <div className="w-full">
+                <button
+                  type="button"
+                  onClick={() => setShowRoadmap(!showRoadmap)}
+                  className="w-full flex items-center justify-between p-3 rounded-xl bg-neutral-900/60 hover:bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-teal-300 transition-colors cursor-pointer text-xs font-mono"
+                >
+                  <span className="flex items-center gap-2">
+                    <Compass className="w-4 h-4 text-teal-400" />
+                    <span>View Full Quest Roadmap ({questSteps.length} steps from Gemini)</span>
+                  </span>
+                  <span>{showRoadmap ? '▲ Hide' : '▼ Show'}</span>
+                </button>
+                {/* Show All Steps */}
+                {showRoadmap && (
+                  <div className="mt-2 p-4 rounded-2xl bg-neutral-900/90 border border-neutral-800 space-y-2 text-left">
+                    <div className="text-[10px] font-pixel text-teal-400 uppercase tracking-wider mb-2">
+                      Full Decomposed Step Sequence:
+                    </div>
+                    {questSteps.map((step, idx) => (
+                      <div
+                        key={idx}
+                        className={`text-xs p-2.5 rounded-lg flex items-start gap-2.5 transition-all ${
+                          idx === stepIndex
+                            ? 'bg-teal-500/20 text-teal-200 border border-teal-500/40 font-medium'
+                            : idx < stepIndex
+                            ? 'text-neutral-500 line-through bg-neutral-950/40'
+                            : 'text-neutral-400 bg-neutral-950/20'
+                        }`}
+                      >
+                        <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-neutral-800 text-neutral-300 shrink-0">
+                          #{idx + 1}
+                        </span>
+                        <span className="leading-relaxed">{step}</span>
+                        {idx === stepIndex && (
+                          <span className="ml-auto text-[10px] font-pixel text-teal-400 uppercase shrink-0">
+                            [CURRENT]
+                          </span>
+                        )}
+                        {idx < stepIndex && (
+                          <span className="ml-auto text-[10px] font-pixel text-neutral-500 uppercase shrink-0">
+                            [DONE]
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="text-xs text-neutral-400 mt-3.5 text-center font-mono">
               Completing a step consumes 1 spoon (-5% HP) and grants +50 XP. If overwhelmed, tap retreat anytime.

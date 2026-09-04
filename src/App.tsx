@@ -4,6 +4,7 @@ import { Footer } from './components/Footer';
 import { SpoonTheoryModal } from './components/SpoonTheoryModal';
 import { ActionManager } from './components/ActionManager.tsx';
 import { BrainBattery } from './components/BrainBattery.tsx';
+import { EphemeralConfessional } from './components/EphemeralConfessional.tsx';
 import type { AppState, GamePlayerStats, FloatingReward } from './types';
 import { soundFx } from './services/soundFx';
 import { decomposeTaskWithGemini } from './services/gemini';
@@ -252,7 +253,22 @@ function App() {
               </motion.div>
             )}
 
-            {/* Venting */}
+            {appState === 'VENTING' && (
+              <motion.div
+                key="state-venting"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+                className="w-full"
+              >
+                <EphemeralConfessional
+                  onCompleteRest={handleVentingComplete}
+                  batteryLowTriggered={batteryTriggeredVent}
+                />
+              </motion.div>
+            )}
+
             {/* Rest */}
           </AnimatePresence>
         </div>

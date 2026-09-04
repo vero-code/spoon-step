@@ -10,6 +10,13 @@
 
 ---
 
+## 📺 Video demo link
+[![SpoonStep Video Walkthrough](https://img.youtube.com/vi/OfgZLkfDLuE/hqdefault.jpg)](https://youtu.be/OfgZLkfDLuE)
+
+> 🎬 **Watch the video [walkthrough](https://youtu.be/OfgZLkfDLuE) 👆**
+
+---
+
 ## 💡 The Problem
 * **Executive Dysfunction & ADHD Paralysis**: Staring at a long to-do list triggers cognitive freeze, overwhelm, and shame spirals.
 * **Concussion & Brain Injury (TBI) Recovery**: Patients experience severe cognitive fatigue. Pushing through exhaustion triggers symptom relapses. International concussion guidelines mandate strict **cognitive pacing and energy conservation**.

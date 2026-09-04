@@ -9,6 +9,7 @@ import {
   HeartHandshake
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import type { FloatingReward } from '../types';
 
 interface ActionManagerProps {
   isStarted: boolean;
@@ -20,6 +21,7 @@ interface ActionManagerProps {
   questSteps: string[];
   onCompleteStep?: () => void;
   onOverwhelmed?: () => void;
+  floatingRewards?: FloatingReward[];
 }
 
 export const ActionManager: React.FC<ActionManagerProps> = ({
@@ -32,6 +34,7 @@ export const ActionManager: React.FC<ActionManagerProps> = ({
   questSteps,
   onCompleteStep,
   onOverwhelmed,
+  floatingRewards = [],
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [showRoadmap, setShowRoadmap] = useState<boolean>(false);
@@ -44,6 +47,20 @@ export const ActionManager: React.FC<ActionManagerProps> = ({
 
   return (
     <div className="w-full max-w-2xl mx-auto px-4 py-6 flex flex-col items-center justify-center min-h-[500px] relative" id="action-manager-container">
+      {/* Floating Reward Text */}
+      <div className="absolute top-12 left-1/2 -translate-x-1/2 pointer-events-none z-30 flex flex-col items-center">
+        {floatingRewards.map((reward) => (
+          <div
+            key={reward.id}
+            className="animate-float-up font-pixel font-bold text-base sm:text-lg text-emerald-300 drop-shadow-[0_2px_8px_rgba(16,185,129,0.7)] flex items-center gap-1.5 bg-neutral-950/80 px-3 py-1 rounded-xl border border-emerald-500/50 my-0.5"
+          >
+            <span>{reward.text}</span>
+            {reward.subText && (
+              <span className="text-xs text-amber-300 font-mono">({reward.subText})</span>
+            )}
+          </div>
+        ))}
+      </div>
       <AnimatePresence mode="wait">
         {!isStarted ? (
           <motion.div

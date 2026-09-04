@@ -250,6 +250,7 @@ function App() {
                   questSteps={questSteps}
                   onCompleteStep={handleCompleteStep}
                   onOverwhelmed={handleOverwhelmed}
+                  floatingRewards={floatingRewards}
                 />
               </motion.div>
             )}

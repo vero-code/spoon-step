@@ -1,75 +1,106 @@
-# React + TypeScript + Vite
+# 🥄 SpoonStep
+> **Gamified Cognitive Scaffold & Energy Pacing AI for ADHD, Burnout, and Concussion Recovery.**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![Hackathon](https://img.shields.io/badge/Hack%20for%20Humanity-Summer%202026-teal)](https://hack-for-humanity-summer-26.devpost.com/)
+[![Powered by](https://img.shields.io/badge/Google%20Gemini-Function%20Calling-blue)](https://aistudio.google.com/)
+[![Track](https://img.shields.io/badge/Tracks-Mental%20Health%20%7C%20Concussion%20Recovery%20%7C%20Responsible%20AI-emerald)](#)
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 💡 The Problem
+* **Executive Dysfunction & ADHD Paralysis**: Staring at a long to-do list triggers cognitive freeze, overwhelm, and shame spirals.
+* **Concussion & Brain Injury (TBI) Recovery**: Patients experience severe cognitive fatigue. Pushing through exhaustion triggers symptom relapses. International concussion guidelines mandate strict **cognitive pacing and energy conservation**.
+* **Toxic Productivity Apps**: Traditional task managers demand relentless streaks, guilt-tripping users when their nervous system is depleted.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🎯 The Solution: SpoonStep
+**SpoonStep** translates neuroscience and **Christine Miserandino's Spoon Theory** into a gentle, retro-RPG micro-tasking interface powered by **Google Gemini**.
 
-## Expanding the ESLint configuration
+Instead of a long, terrifying to-do list, SpoonStep gives you **strictly ONE physical movement at a time**, tracks your finite cognitive stamina, and forcibly retreats you to a safe zone before a mental crash.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## ✨ Key Features & Clinical Grounding
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 1. ⚔️ Single Micro-Movement Terminal (Cognitive Load Theory)
+* Powered by Gemini Function Calling (`gemini-3.8-flash`), overwhelming tasks (e.g., *"Clean chaotic apartment"*) are decomposed into **5–8 atomic physical movements** (*"Stand up and look at the sink for 5 seconds"*, *"Rinse one single fork"*).
+* Eliminates decision paralysis by hiding all future steps.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 2. 🥄 Brain Battery & Pacing (20 Spoons Stamina)
+* Based on clinical Spoon Theory: each user starts with 20 Spoons (100% HP).
+* Each micro-step costs **1 Spoon (-5% HP)** and rewards **+50 XP** with satisfying floating combo particles.
 
+### 3. 🛡️ Campfire Inn (Concussion Recovery & Screen Break)
+* When stamina drops below **15%**, the app disables all task inputs and triggers mandatory cognitive rest.
+* Built-in **Box Breathing (4-4-4-4)** animated visual pacer activates the parasympathetic nervous system.
+* Enforces a 20-minute screen break to prevent post-concussion symptom flare-ups.
+
+### 4. 🌌 Void Sanctuary & Zero-Storage Ephemeral Memory (Responsible AI)
+* When overwhelmed, users can vent their raw feelings to a safe zone.
+* The unified Gemini agent invokes the `comfort_user` tool to deliver pressure-free emotional validation (zero toxic positivity).
+* **Privacy-First (Data Minimization)**: The vent text blurs and **dissolves into the void after 8 seconds**. Zero database persistence, zero tracking, completely ephemeral.
+
+### 5. 🔑 Judge-Friendly BYOK (Bring Your Own Key)
+* Built-in API Key Modal allows hackathon judges and users to securely test with their own Google AI Studio key stored locally in `localStorage`.
+
+---
+
+## 🛠️ Tech Stack & Architecture
+* **Frontend**: React 19, TypeScript, Vite, Tailwind CSS
+* **Animations & Micro-interactions**: Framer Motion (`motion/react`)
+* **AI Orchestration**: Google GenAI SDK (`@google/genai`) with Gemini Function Calling (`gemini-3.8-flash`)
+* **Audio Synthesis**: Native Web Audio API (custom 8-bit chiptune sound generator, zero external audio assets)
+* **Icons**: Lucide React
+
+---
+
+## 🔒 Responsible AI & Safety Guardrails
+1. **Privacy & Ephemeral Memory**: No sensitive user thoughts or mental health notes are stored on servers or logged.
+2. **Explicit Medical Disclaimer**: SpoonStep is a cognitive pacing scaffold, not a replacement for clinical psychiatric or neurological care.
+3. **Zero Medical Hallucination**: Tool definitions restrict the model strictly to physical movement decomposition and empathetic listening.
+
+---
+
+## 🚀 Quick Start for Judges
+
+### 1. Clone & Install
+```bash
+git clone https://github.com/your-username/spoon-step.git
+cd spoon-step
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+### 2. Set Gemini API Key
+Create a `.env` file or click the **🔑 API Key** button directly in the app header:
+```env
+VITE_GEMINI_API_KEY=your_google_ai_studio_key_here
 ```
+
+### 3. Run Locally
+```bash
+npm run dev
+```
+Open `http://localhost:5173` in your browser.
+
+---
+
+## 📋 Hackathon Submission Alignment
+
+| Category | How SpoonStep Addresses It |
+| :--- | :--- |
+| **Mental Health** | Dismantles executive paralysis, shame spirals, and ADHD inertia into non-threatening atomic steps. |
+| **Concussion Recovery** | Enforces cognitive pacing, finite spoon budget, box breathing, and mandatory screen-break rest. |
+| **Responsible AI** | 8-second ephemeral memory dissolution, BYOK architecture, zero third-party health tracking. |
+| **UI/UX & Accessibility** | High-contrast dark theme, low visual clutter, large legible typography, and playful retro-RPG delight. |
+
+---
+
+## 📄 License
+This project is open-source and available under the [MIT License](LICENSE).  
+Copyright © 2026 Veronika Kashtanova.
+
+---
+
+### ⚖️ Disclaimer
+*SpoonStep is a supportive cognitive pacing game inspired by Spoon Theory and neuroscience. It is not intended to diagnose, treat, or replace professional medical, psychiatric, or neurological consultation.*

@@ -4,7 +4,7 @@ import { Footer } from './components/Footer';
 import { SpoonTheoryModal } from './components/SpoonTheoryModal';
 import { ActionManager } from './components/ActionManager.tsx';
 import { BrainBattery } from './components/BrainBattery.tsx';
-import type { AppState } from './types';
+import type { AppState, GamePlayerStats, FloatingReward } from './types';
 import { soundFx } from './services/soundFx';
 import { decomposeTaskWithGemini } from './services/gemini';
 import { AnimatePresence, motion } from 'motion/react';
@@ -14,7 +14,13 @@ const STORAGE_KEY = 'spoon_quest_session';
 function App() {
   const [appState, setAppState] = useState<AppState>('ACTION');
   const [battery, setBattery] = useState<number>(100);
+  const [batteryTriggeredVent, setBatteryTriggeredVent] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
+
+  // Game progression state
+  const [xp, setXp] = useState<number>(0);
+  const [comboStreak, setComboStreak] = useState<number>(0);
+  const [floatingRewards, setFloatingRewards] = useState<FloatingReward[]>([]);
 
   // Task session state
   const [isStarted, setIsStarted] = useState<boolean>(false);
@@ -60,6 +66,48 @@ function App() {
     }
   }, [isStarted, taskName, questSteps, currentStep, stepIndex, stepsCompleted, battery]);
 
+  // Calculate Level and Title
+  const getPlayerStats = (): GamePlayerStats => {
+    let level = 1;
+    let title = 'Spoon Novice';
+
+    if (xp >= 500) {
+      level = 4;
+      title = 'Grandmaster of Focus';
+    } else if (xp >= 300) {
+      level = 3;
+      title = 'Cognitive Paladin';
+    } else if (xp >= 150) {
+      level = 2;
+      title = 'Spoon Adept';
+    }
+
+    const xpToNextLevel = level === 1 ? 150 : level === 2 ? 300 : 500;
+
+    return {
+      level,
+      xp,
+      xpToNextLevel,
+      comboStreak,
+      title,
+      spoonsRemaining: Math.max(0, Math.round(battery / 5)),
+      totalSpoons: 20
+    };
+  };
+
+  const triggerFloatingReward = (text: string, subText?: string) => {
+    const newReward: FloatingReward = {
+      id: Date.now() + Math.random(),
+      text,
+      subText,
+      type: 'xp'
+    };
+    setFloatingRewards((prev) => [...prev, newReward]);
+    setTimeout(() => {
+      setFloatingRewards((prev) => prev.filter((r) => r.id !== newReward.id));
+    }, 1200);
+  };
+
   const toggleSound = () => {
     const nextState = !isMuted;
     setIsMuted(nextState);
@@ -87,6 +135,63 @@ function App() {
     }
   };
 
+  // 'I did it!' handler
+  const handleCompleteStep = async () => {
+    soundFx.playStepSuccess();
+    const nextBattery = Math.max(0, battery - 5);
+    setBattery(nextBattery);
+    setStepsCompleted((prev) => prev + 1);
+
+    const nextStreak = comboStreak + 1;
+    setComboStreak(nextStreak);
+    setXp((prev) => prev + 50);
+
+    triggerFloatingReward(
+      '+50 XP',
+      nextStreak > 1 ? `${nextStreak}x COMBO!` : '🥄 -1 Spoon'
+    );
+
+    // If battery drops below 15%
+    if (nextBattery < 15) {
+      setBatteryTriggeredVent(true);
+      setAppState('VENTING');
+      return;
+    }
+
+    // Otherwise show next micro-step
+    const nextIndex = stepIndex + 1;
+    setStepIndex(nextIndex);
+    setIsLoadingStep(true);
+
+    try {
+      // Show next micro-step from Gemini
+      if (nextIndex < questSteps.length) {
+        setStepIndex(nextIndex);
+        setCurrentStep(questSteps[nextIndex]);
+      } else {
+        soundFx.playQuestStart();
+        alert('🎉 Quest Completed! You broke the inertia!');
+        handleResetApp();
+      }
+    } catch (err) {
+      setCurrentStep('Pause for 5 seconds and relax your shoulders.');
+    } finally {
+      setIsLoadingStep(false);
+    }
+  };
+
+  // 'I'm overwhelmed...' handler
+  const handleOverwhelmed = () => {
+    setBatteryTriggeredVent(false);
+    setComboStreak(0);
+    setAppState('VENTING');
+  };
+
+  // When ephemeral dissolve finishes
+  const handleVentingComplete = () => {
+    setAppState('REST');
+  };
+
   // Reset entire application
   const handleResetApp = () => {
     localStorage.removeItem(STORAGE_KEY);
@@ -98,7 +203,11 @@ function App() {
     setStepIndex(0);
     setStepsCompleted(0);
     setQuestSteps([]);
+    setComboStreak(0);
+    setBatteryTriggeredVent(false);
   };
+
+  const playerStats = getPlayerStats();
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col justify-between selection:bg-teal-500/30 selection:text-teal-200">
@@ -114,6 +223,7 @@ function App() {
         <BrainBattery 
           battery={battery} 
           isDepleted={battery < 15 || appState === 'REST'}
+          stats={playerStats}
         />
 
         {/* State View Switcher */}
@@ -136,6 +246,8 @@ function App() {
                   isLoadingStep={isLoadingStep}
                   onStartTask={handleStartTask}
                   questSteps={questSteps}
+                  onCompleteStep={handleCompleteStep}
+                  onOverwhelmed={handleOverwhelmed}
                 />
               </motion.div>
             )}

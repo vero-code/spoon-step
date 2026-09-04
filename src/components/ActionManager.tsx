@@ -4,7 +4,9 @@ import {
   Swords,
   Scroll,
   Compass,
-  Loader2
+  Loader2,
+  Check,
+  HeartHandshake
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -16,6 +18,8 @@ interface ActionManagerProps {
   isLoadingStep: boolean;
   onStartTask: (task: string) => void;
   questSteps: string[];
+  onCompleteStep?: () => void;
+  onOverwhelmed?: () => void;
 }
 
 export const ActionManager: React.FC<ActionManagerProps> = ({
@@ -26,6 +30,8 @@ export const ActionManager: React.FC<ActionManagerProps> = ({
   isLoadingStep,
   onStartTask,
   questSteps,
+  onCompleteStep,
+  onOverwhelmed,
 }) => {
   const [inputValue, setInputValue] = useState('');
   const [showRoadmap, setShowRoadmap] = useState<boolean>(false);
@@ -157,6 +163,31 @@ export const ActionManager: React.FC<ActionManagerProps> = ({
             </div>
 
             {/* TODO: Action Buttons */}
+            <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              {/* Primary: 'I did it!' */}
+              <button
+                id="i-did-it-btn"
+                type="button"
+                onClick={onCompleteStep}
+                disabled={isLoadingStep}
+                className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-teal-500 to-emerald-400 hover:from-teal-400 hover:to-emerald-300 active:scale-[0.99] text-neutral-950 font-pixel text-sm sm:text-base font-bold rounded-2xl transition-all shadow-lg shadow-teal-500/20 cursor-pointer disabled:opacity-50"
+              >
+                <Check className="w-6 h-6 stroke-[3]" />
+                <span>I DID IT! (+50 XP)</span>
+              </button>
+
+              {/* Secondary/Muted: 'I'm overwhelmed...' */}
+              <button
+                id="im-overwhelmed-btn"
+                type="button"
+                onClick={onOverwhelmed}
+                className="w-full flex items-center justify-center gap-2.5 px-6 py-4 bg-neutral-900 hover:bg-neutral-850 active:bg-neutral-800 text-neutral-300 hover:text-neutral-100 border border-neutral-800 hover:border-rose-500/40 rounded-2xl font-medium text-sm sm:text-base transition-all cursor-pointer"
+              >
+                <HeartHandshake className="w-5 h-5 text-rose-400" />
+                <span>I'm overwhelmed... (Sanctuary)</span>
+              </button>
+            </div>
+
             {/* Show Roadmap */}
             {questSteps && questSteps.length > 0 && (
               <div className="w-full">

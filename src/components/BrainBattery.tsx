@@ -1,12 +1,17 @@
 import React from 'react';
-import { Sparkles, Utensils, Shield } from 'lucide-react';
+import { Sparkles, Utensils, Shield, Flame } from 'lucide-react';
+import type { GamePlayerStats } from '../types';
 
 interface BrainBatteryProps {
   battery: number; // 0 to 100
   isDepleted: boolean;
+  stats: GamePlayerStats;
 }
 
-export const BrainBattery: React.FC<BrainBatteryProps> = ({ battery }) => {
+export const BrainBattery: React.FC<BrainBatteryProps> = ({
+  battery,
+  stats
+}) => {
   const totalSpoons = 20;
   const activeSpoons = Math.max(0, Math.round(battery / 5));
 
@@ -39,6 +44,15 @@ export const BrainBattery: React.FC<BrainBatteryProps> = ({ battery }) => {
   };
 
   const theme = getBatteryColor();
+  const xpPercent = Math.min(100, Math.round((stats.xp % stats.xpToNextLevel) / stats.xpToNextLevel * 100));
+
+  const playerTitle = stats.level === 4
+    ? 'Grandmaster of Focus'
+    : stats.level === 3
+    ? 'Cognitive Paladin'
+    : stats.level === 2
+    ? 'Spoon Adept'
+    : 'Spoon Novice';
 
   return (
     <header className="w-full max-w-2xl mx-auto px-4 pt-4 pb-2" id="brain-battery-header">
@@ -48,11 +62,36 @@ export const BrainBattery: React.FC<BrainBatteryProps> = ({ battery }) => {
           <div className="relative">
             <div className="w-10 h-10 rounded-xl bg-neutral-950 border border-teal-500/40 flex items-center justify-center text-teal-300 shadow-inner">
               <Shield className="w-5 h-5 text-teal-400" />
-              {/* TODO: Add level */}
+              <span className="absolute -bottom-1.5 -right-1.5 font-pixel text-[10px] px-1.5 py-0.2 bg-teal-500 text-neutral-950 font-bold rounded-md shadow">
+                Lv.{stats.level}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-neutral-200 tracking-wide font-pixel">
+                {playerTitle}
+              </span>
+              {stats.comboStreak > 1 && (
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-500/20 border border-amber-500/40 text-[10px] font-bold text-amber-300 font-pixel animate-pulse">
+                  <Flame className="w-3 h-3 text-amber-400 fill-amber-400" />
+                  x{stats.comboStreak}
+                </span>
+              )}
+            </div>
+
+            {/* Mini XP bar */}
+            <div className="flex items-center gap-2 mt-1">
+              <div className="w-24 sm:w-32 h-1.5 bg-neutral-950 rounded-full overflow-hidden border border-neutral-800">
+                <div 
+                  className="h-full bg-gradient-to-r from-teal-400 to-cyan-300 transition-all duration-500" 
+                  style={{ width: `${xpPercent}%` }}
+                />
+              </div>
+              <span className="text-[10px] text-neutral-400 font-mono">
+                {stats.xp}/{stats.xpToNextLevel} XP
+              </span>
             </div>
           </div>
-
-          {/* TODO: Add player title and XP bar */}
         </div>
 
         {/* Right: Spoons Tokens Counter */}

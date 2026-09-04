@@ -24,6 +24,13 @@ interface ActionManagerProps {
   floatingRewards?: FloatingReward[];
 }
 
+const PRESET_QUESTS = [
+  { label: '⚔️ [Boss] Clean the chaotic kitchen sink', task: 'Clean the chaotic kitchen sink' },
+  { label: '📜 [Dungeon] Answer overdue email thread', task: 'Answer the overdue email thread' },
+  { label: '🧺 [Bounty] Fold the laundry mountain', task: 'Fold the laundry mountain on the chair' },
+  { label: '✍️ [Daily] Write project intro paragraph', task: 'Write the project introduction paragraph' },
+];
+
 export const ActionManager: React.FC<ActionManagerProps> = ({
   isStarted,
   taskName,
@@ -114,6 +121,29 @@ export const ActionManager: React.FC<ActionManagerProps> = ({
                 </button>
               </div>
             </form>
+
+            {/* Quick Presets */}
+            <div className="mt-8 pt-5 border-t border-neutral-900">
+              <p className="text-xs uppercase tracking-wider text-neutral-400 mb-3 text-center font-pixel">
+                Or choose a common boss quest:
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {PRESET_QUESTS.map((item) => (
+                  <button
+                    key={item.task}
+                    id={`preset-${item.task.slice(0, 12).replace(/\s+/g, '-').toLowerCase()}`}
+                    type="button"
+                    onClick={() => setInputValue(item.task)}
+                    className="text-xs px-3.5 py-2.5 rounded-xl bg-neutral-900/70 hover:bg-neutral-850 border border-neutral-800/80 hover:border-teal-500/40 text-neutral-300 hover:text-neutral-100 transition-all cursor-pointer text-left flex items-center justify-between group"
+                  >
+                    <span className="truncate">{item.label}</span>
+                    <span className="text-[10px] text-teal-400 font-pixel opacity-0 group-hover:opacity-100 transition-opacity ml-2 shrink-0">
+                      +50XP
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </motion.div>
         ) : (
           /* STATE 1 - Action Mode (Single Micro-Step Quest Terminal) */

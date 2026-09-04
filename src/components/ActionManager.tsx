@@ -1,12 +1,28 @@
 import React, { useState } from 'react';
-import { ArrowRight, Swords, Scroll } from 'lucide-react';
+import {
+  ArrowRight,
+  Swords,
+  Scroll,
+  Compass,
+  Loader2
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface ActionManagerProps {
+  isStarted: boolean;
+  taskName: string;
+  currentStep: string;
+  stepIndex: number;
+  isLoadingStep: boolean;
   onStartTask: (task: string) => void;
 }
 
 export const ActionManager: React.FC<ActionManagerProps> = ({
+  isStarted,
+  taskName,
+  currentStep,
+  stepIndex,
+  isLoadingStep,
   onStartTask,
 }) => {
   const [inputValue, setInputValue] = useState('');
@@ -20,6 +36,7 @@ export const ActionManager: React.FC<ActionManagerProps> = ({
   return (
     <div className="w-full max-w-2xl mx-auto px-4 py-6 flex flex-col items-center justify-center min-h-[500px] relative" id="action-manager-container">
       <AnimatePresence mode="wait">
+        {!isStarted ? (
           <motion.div
             key="input-form"
             initial={{ opacity: 0, y: 12 }}
@@ -72,7 +89,77 @@ export const ActionManager: React.FC<ActionManagerProps> = ({
               </div>
             </form>
           </motion.div>
-        
+        ) : (
+          /* STATE 1 - Action Mode (Single Micro-Step Quest Terminal) */
+          <motion.div
+            key={`step-${stepIndex}`}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.35, ease: 'easeOut' }}
+            className="w-full flex flex-col items-center"
+          >
+            {/* Quest Banner */}
+            <div className="w-full flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-xl bg-neutral-900/80 border border-neutral-800 mb-4 text-xs">
+              <div className="flex items-center gap-2 text-neutral-300 truncate max-w-[280px] sm:max-w-md">
+                <Compass className="w-4 h-4 text-teal-400 shrink-0" />
+                <span className="font-pixel text-[11px] text-teal-400 uppercase">
+                  QUEST:
+                </span>
+                <span className="truncate font-medium text-neutral-200">{taskName}</span>
+              </div>
+              <div className="flex items-center gap-2 font-pixel text-[11px] ml-auto">
+                <span className="px-2 py-0.5 rounded bg-neutral-950 border border-neutral-800 text-teal-300">
+                  {`STEP #${stepIndex + 1}`}
+                </span>
+                <span className="text-amber-400">+50 XP</span>
+              </div>
+            </div>
+
+            {/* Single Micro-Step Focus Card */}
+            <div 
+              id="micro-step-card"
+              className="w-full p-6 sm:p-10 rounded-3xl bg-neutral-900/80 border-2 border-neutral-800 shadow-2xl relative overflow-hidden text-center mb-6 flex flex-col justify-center min-h-[220px]"
+            >
+              {/* Corner RPG Accents */}
+              <div className="absolute top-3 left-4 text-[10px] uppercase font-pixel tracking-widest text-teal-400 font-bold flex items-center gap-1.5">
+                <span className="w-2 h-2 bg-teal-400 rounded-sm animate-pulse" />
+                CURRENT OBJECTIVE
+              </div>
+
+              <div className="absolute top-3 right-4 text-[10px] font-pixel text-neutral-400">
+                REWARD: +50 XP
+              </div>
+
+              {isLoadingStep ? (
+                <div className="flex flex-col items-center justify-center py-8 gap-3">
+                  <Loader2 className="w-8 h-8 text-teal-400 animate-spin" />
+                  <span className="text-xs font-pixel text-neutral-400">
+                    Generating next micro-action...
+                  </span>
+                </div>
+              ) : (
+                <div className="my-auto py-2">
+                  <p 
+                    id="current-step-text"
+                    className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-neutral-50 leading-snug"
+                  >
+                    {currentStep}
+                  </p>
+                  <p className="text-xs sm:text-sm text-neutral-400 mt-4 max-w-md mx-auto">
+                    Nothing else matters right now. Just this one movement.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* TODO: Action Buttons */}
+
+            <div className="text-xs text-neutral-400 mt-3.5 text-center font-mono">
+              Completing a step consumes 1 spoon (-5% HP) and grants +50 XP. If overwhelmed, tap retreat anytime.
+            </div>
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );

@@ -10,11 +10,24 @@ import { AnimatePresence, motion } from 'motion/react';
 function App() {
   const [appState, setAppState] = useState<AppState>('ACTION');
   const [battery, setBattery] = useState<number>(100);
+
+  // Task session state
+  const [isStarted, setIsStarted] = useState<boolean>(false);
+  const [taskName, setTaskName] = useState<string>('');
+  const [currentStep, setCurrentStep] = useState<string>('');
+  const [stepIndex, setStepIndex] = useState<number>(0);
+  const [isLoadingStep, setIsLoadingStep] = useState<boolean>(false);
+
   const [showTheoryModal, setShowTheoryModal] = useState<boolean>(false);
 
   // Start micro-tasking / quest
   const handleStartTask = async (task: string) => {
-    console.log(task);
+    setTaskName(task);
+    setIsStarted(true);
+    setStepIndex(0);
+    setIsLoadingStep(true);
+
+    setCurrentStep('first step');
   };
 
   return (
@@ -40,6 +53,11 @@ function App() {
                 className="w-full"
               >
                 <ActionManager
+                  isStarted={isStarted}
+                  taskName={taskName}
+                  currentStep={currentStep}
+                  stepIndex={stepIndex}
+                  isLoadingStep={isLoadingStep}
                   onStartTask={handleStartTask}
                 />
               </motion.div>

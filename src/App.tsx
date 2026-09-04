@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Swords, Info } from 'lucide-react';
 import { SpoonTheoryModal } from './components/SpoonTheoryModal';
+import { Footer } from './components/Footer';
 
 function App() {
   const [showTheoryModal, setShowTheoryModal] = useState<boolean>(false);
@@ -44,7 +45,8 @@ function App() {
         </div>
       </nav>
 
-      {/* Spoon Theory Modal */}
+      <Footer />
+
       <SpoonTheoryModal
         isOpen={showTheoryModal}
         onClose={() => setShowTheoryModal(false)}

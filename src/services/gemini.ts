@@ -1,6 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
 
-// Retrieve API key from Vite env or localStorage
+// 1. API Key accessor
 export function getGeminiApiKey(): string {
   const envKey = import.meta.env.VITE_GEMINI_API_KEY;
   if (envKey && typeof envKey === 'string' && envKey.trim()) {
@@ -13,11 +13,9 @@ export function getGeminiApiKey(): string {
   return '';
 }
 
-/**
- * Function declaration according to Google Gen AI documentation:
- * Instead of generating text responses, the model determines when to call specific
- * functions and provides the necessary parameters to execute real-world actions.
- */
+// -------------------------------------------------------------
+// TOOL 1: Action Inertia Breaker (Decomposition)
+// -------------------------------------------------------------
 export const decomposeTaskTool = {
   type: 'function' as const,
   name: 'decompose_task',
@@ -37,38 +35,107 @@ export const decomposeTaskTool = {
   },
 };
 
+// -------------------------------------------------------------
+// TOOL 2: Sanctuary Comfort & Nervous System Regulation
+// -------------------------------------------------------------
+export const comfortUserTool = {
+  type: 'function' as const,
+  name: 'comfort_user',
+  description:
+    'Provides gentle, neurodiversity-affirming emotional validation and non-judgmental comfort for a user experiencing burnout, ADHD paralysis, or guilt.',
+  parameters: {
+    type: 'object',
+    properties: {
+      comfort_message: {
+        type: 'string',
+        description:
+          'Warm, quiet 2-sentence validation acknowledging that their nervous system is overwhelmed and giving full permission to put down the weight. Zero toxic positivity.',
+      },
+    },
+    required: ['comfort_message'],
+  },
+};
+
+// Toolset of our unified SpoonStep Agent
+export const SPOON_STEP_TOOLS = [decomposeTaskTool, comfortUserTool];
+
+// -------------------------------------------------------------
+// THE UNIFIED SPOONSTEP AGENT
+// -------------------------------------------------------------
+export interface AgentResponse {
+  toolCalled: 'decompose_task' | 'comfort_user';
+  steps?: string[];
+  comfortMessage?: string;
+}
+
 /**
- * Calls Gemini 3.8 Flash using Interactions API Function Calling per official docs
+ * Single Agent entry point equipped with both tools simultaneously
  */
-export async function decomposeTaskWithGemini(taskName: string): Promise<string[]> {
+export async function runSpoonStepAgent(userInput: string): Promise<AgentResponse> {
   const apiKey = getGeminiApiKey();
   if (!apiKey) {
-    throw new Error('Gemini API key is missing. Please set VITE_GEMINI_API_KEY in your .env file.');
+    throw new Error('Gemini API key is missing. Please set VITE_GEMINI_API_KEY.');
   }
 
   const client = new GoogleGenAI({ apiKey });
 
-  // Strictly per official Google documentation: client.interactions.create with gemini-3.8-flash
+  // Call the Agent with the full toolset!
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const interaction: any = await (client as any).interactions.create({
     model: 'gemini-3.8-flash',
-    input: `The user feels paralyzed by this task: "${taskName}". Break it down into 5 to 8 single physical movements.`,
-    tools: [decomposeTaskTool],
+    input: userInput,
+    tools: SPOON_STEP_TOOLS,
   });
 
   if (interaction?.steps) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     for (const step of interaction.steps) {
-      if (step.type === 'function_call' && step.name === 'decompose_task') {
-        const args = step.arguments as { steps?: string[] };
-        if (args?.steps && Array.isArray(args.steps) && args.steps.length > 0) {
-          const cleanSteps = args.steps.map((s) => String(s).trim()).filter(Boolean);
-          console.log('🤖 [Gemini 3.8 Flash Function Calling Result]:', cleanSteps);
-          return cleanSteps;
+      if (step.type === 'function_call') {
+        if (step.name === 'decompose_task') {
+          const args = step.arguments as { steps?: string[] };
+          const steps = (args.steps || []).map((s) => String(s).trim()).filter(Boolean);
+          console.log('🤖 [Agent invoked Tool: decompose_task]:', steps);
+          return { toolCalled: 'decompose_task', steps };
+        }
+
+        if (step.name === 'comfort_user') {
+          const args = step.arguments as { comfort_message?: string };
+          const msg = (args.comfort_message || '').trim();
+          console.log('🤖 [Agent invoked Tool: comfort_user]:', msg);
+          return { toolCalled: 'comfort_user', comfortMessage: msg };
         }
       }
     }
   }
 
-  throw new Error('Gemini did not return function_call steps for decompose_task.');
+  throw new Error('Agent did not call any tools.');
+}
+
+// -------------------------------------------------------------
+// Convenience helper functions for components
+// -------------------------------------------------------------
+
+export async function decomposeTaskWithGemini(taskName: string): Promise<string[]> {
+  const result = await runSpoonStepAgent(
+    `The user feels paralyzed by this task: "${taskName}". Break it down into single physical movements.`
+  );
+  if (result.steps && result.steps.length > 0) {
+    return result.steps;
+  }
+  throw new Error('Failed to decompose task');
+}
+
+export async function fetchComfortingResponse(ventText: string): Promise<string> {
+  try {
+    const result = await runSpoonStepAgent(
+      `The user feels burned out and just vented: "${ventText}". Hold space and comfort them.`
+    );
+    if (result.comfortMessage) {
+      return result.comfortMessage;
+    }
+  } catch (error) {
+    console.warn('⚠️ Agent comfort fallback:', error);
+  }
+
+  throw new Error('Failed to get comforting response.');
 }

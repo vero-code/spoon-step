@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { SpoonTheoryModal } from './components/SpoonTheoryModal';
@@ -8,6 +8,8 @@ import type { AppState } from './types';
 import { soundFx } from './services/soundFx';
 import { decomposeTaskWithGemini } from './services/gemini';
 import { AnimatePresence, motion } from 'motion/react';
+
+const STORAGE_KEY = 'spoon_quest_session';
 
 function App() {
   const [appState, setAppState] = useState<AppState>('ACTION');
@@ -24,6 +26,39 @@ function App() {
   const [questSteps, setQuestSteps] = useState<string[]>([]);
 
   const [showTheoryModal, setShowTheoryModal] = useState<boolean>(false);
+
+  // 1. Load state from localStorage
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const data = JSON.parse(raw);
+        if (data.isStarted && data.questSteps?.length > 0) {
+          setIsStarted(true);
+          setTaskName(data.taskName || '');
+          setQuestSteps(data.questSteps || []);
+          setCurrentStep(data.currentStep || data.questSteps[data.stepIndex || 0] || '');
+          setStepIndex(data.stepIndex || 0);
+          setBattery(data.battery ?? 100);
+          setStepsCompleted(data.stepsCompleted || 0);
+        }
+      }
+    } catch {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  }, []);
+
+  // 2. Save state to localStorage on every change
+  useEffect(() => {
+    if (isStarted && questSteps.length > 0) {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ isStarted, taskName, questSteps, currentStep, stepIndex, stepsCompleted, battery })
+      );
+    } else if (!isStarted) {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  }, [isStarted, taskName, questSteps, currentStep, stepIndex, stepsCompleted, battery]);
 
   const toggleSound = () => {
     const nextState = !isMuted;
@@ -52,8 +87,9 @@ function App() {
     }
   };
 
-  // Reset entire application for hackathon testing
+  // Reset entire application
   const handleResetApp = () => {
+    localStorage.removeItem(STORAGE_KEY);
     setAppState('ACTION');
     setBattery(100);
     setIsStarted(false);
@@ -61,6 +97,7 @@ function App() {
     setCurrentStep('');
     setStepIndex(0);
     setStepsCompleted(0);
+    setQuestSteps([]);
   };
 
   return (

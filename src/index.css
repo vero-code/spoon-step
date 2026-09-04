@@ -9,3 +9,73 @@
 .font-pixel {
   font-family: 'Silkscreen', monospace, monospace;
 }
+
+@keyframes dissolveToBlack {
+  0% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    opacity: 0.6;
+    filter: blur(3px);
+    transform: translateY(-2px) scale(0.99);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(16px);
+    transform: translateY(-10px) scale(0.95);
+    pointer-events: none;
+  }
+}
+
+.animate-dissolve {
+  animation: dissolveToBlack 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes floatUpFade {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.8);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.1);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(-28px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.9);
+  }
+}
+
+.animate-float-up {
+  animation: floatUpFade 1.4s ease-out forwards;
+}
+
+@keyframes gentlePulse {
+  0%, 100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.02);
+  }
+}
+
+.animate-gentle-pulse {
+  animation: gentlePulse 4s ease-in-out infinite;
+}
+
+@keyframes pixelBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.animate-pixel-blink {
+  animation: pixelBlink 1s infinite;
+}

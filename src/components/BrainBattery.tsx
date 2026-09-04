@@ -57,16 +57,18 @@ export const BrainBattery: React.FC<BrainBatteryProps> = ({
   return (
     <header className="w-full max-w-2xl mx-auto px-4 pt-4 pb-2" id="brain-battery-header">
       <div className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-neutral-900/90 border border-neutral-800 shadow-md mb-3">
-        {/* Left: Player Avatar  */}
+        {/* Left: Player Avatar & Level */}
         <div className="flex items-center gap-2.5">
           <div className="relative">
             <div className="w-10 h-10 rounded-xl bg-neutral-950 border border-teal-500/40 flex items-center justify-center text-teal-300 shadow-inner">
               <Shield className="w-5 h-5 text-teal-400" />
-              <span className="absolute -bottom-1.5 -right-1.5 font-pixel text-[10px] px-1.5 py-0.2 bg-teal-500 text-neutral-950 font-bold rounded-md shadow">
-                Lv.{stats.level}
-              </span>
             </div>
+            <span className="absolute -bottom-1.5 -right-1.5 font-pixel text-[10px] px-1.5 py-0.2 bg-teal-500 text-neutral-950 font-bold rounded-md shadow">
+              LV.{stats.level}
+            </span>
+          </div>
 
+          <div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold text-neutral-200 tracking-wide font-pixel">
                 {playerTitle}
@@ -88,7 +90,7 @@ export const BrainBattery: React.FC<BrainBatteryProps> = ({
                 />
               </div>
               <span className="text-[10px] text-neutral-400 font-mono">
-                {stats.xp}/{stats.xpToNextLevel} XP
+                {stats.xp} XP
               </span>
             </div>
           </div>

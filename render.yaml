@@ -1,0 +1,14 @@
+# Render Blueprint specification for SpoonStep
+# Learn more: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: spoon-step
+    runtime: static
+    buildCommand: npm run build
+    staticPublishPath: ./dist
+    routes:
+      # SPA fallback routing
+      - type: rewrite
+        source: /*
+        destination: /index.html

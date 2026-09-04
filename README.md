@@ -94,6 +94,8 @@ graph TD
 
 ## 🚀 Quick Start for Judges
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+
 ### 1. Clone & Install
 ```bash
 git clone https://github.com/your-username/spoon-step.git
@@ -101,17 +103,14 @@ cd spoon-step
 npm install
 ```
 
-### 2. Set Gemini API Key
-Create a `.env` file or click the **🔑 API Key** button directly in the app header:
-```env
-VITE_GEMINI_API_KEY=your_google_ai_studio_key_here
-```
-
-### 3. Run Locally
+### 2. Run Locally
 ```bash
 npm run dev
 ```
 Open `http://localhost:5173` in your browser.
+
+### 3. Connect API Key (In-App BYOK)
+Click the **🔑 API Key** button in the header (or simply start any micro-quest) and enter your free key from [Google AI Studio](https://aistudio.google.com/apikey). The key is stored securely in your browser's local storage—no `.env` file configuration required.
 
 ---
 

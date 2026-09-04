@@ -53,6 +53,36 @@ Instead of a long, terrifying to-do list, SpoonStep gives you **strictly ONE phy
 * **Audio Synthesis**: Native Web Audio API (custom 8-bit chiptune sound generator, zero external audio assets)
 * **Icons**: Lucide React
 
+### 🏛️ System Architecture Workflow
+
+```mermaid
+graph TD
+    User([User with ADHD / Concussion / Burnout]) -->|Enters Overwhelming Task| UI[Single-Objective Action Terminal]
+    UI -->|Requests Decomposition| Agent["Unified SpoonStep Agent: Gemini 3.8 Flash"]
+
+    subgraph AI_Engine [Google GenAI Function Calling Engine]
+        Agent --> Tools{"Tool Selection"}
+        Tools -->|Inertia Breaker| T1["Tool: decompose_task<br/>5-8 Atomic Physical Steps"]
+        Tools -->|Sanctuary Space| T2["Tool: comfort_user<br/>Empathetic Validation"]
+    end
+
+    T1 -->|Loads 1 step at a time| Terminal["Micro-Step Focus Card"]
+    Terminal -->|Completes Step| Stamina["Brain Battery: -1 Spoon / +50 XP"]
+
+    Stamina -->|Stamina Remaining| Terminal
+    Stamina -->|Critical Stamina Exhaustion| Recovery["Campfire Inn: Cognitive Recovery"]
+
+    Terminal -->|User Retreats| Sanctuary["Void Confessional"]
+    T2 -->|Comfort Message| Sanctuary
+    Sanctuary -->|8-Second Visual Dissolve| Ephemeral[("Zero-Storage Memory: Purged")]
+
+    Recovery -->|Box Breathing 4-4-4-4 & Screen Rest| FullReset(["Battery Restored: 20/20 Spoons"])
+
+    subgraph Security_Layer [Responsible AI & Privacy]
+        BYOK["Client-side BYOK: localStorage"] -.->|Direct HTTPS| Agent
+    end
+```
+
 ---
 
 ## 🔒 Responsible AI & Safety Guardrails

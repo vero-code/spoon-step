@@ -19,6 +19,7 @@ function App() {
   const [currentStep, setCurrentStep] = useState<string>('');
   const [stepIndex, setStepIndex] = useState<number>(0);
   const [isLoadingStep, setIsLoadingStep] = useState<boolean>(false);
+  const [stepsCompleted, setStepsCompleted] = useState<number>(0);
 
   const [showTheoryModal, setShowTheoryModal] = useState<boolean>(false);
 
@@ -39,12 +40,25 @@ function App() {
     setCurrentStep('first step');
   };
 
+  // Reset entire application for hackathon testing
+  const handleResetApp = () => {
+    setAppState('ACTION');
+    setBattery(100);
+    setIsStarted(false);
+    setTaskName('');
+    setCurrentStep('');
+    setStepIndex(0);
+    setStepsCompleted(0);
+  };
+
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col justify-between selection:bg-teal-500/30 selection:text-teal-200">
       <Header
         onOpenTheoryModal={() => setShowTheoryModal(true)}
         toggleSound={toggleSound}
         isMuted={isMuted}
+        isStarted={isStarted}
+        handleResetApp={handleResetApp}
       />
 
       <main className="flex-1 flex flex-col justify-start w-full max-w-4xl mx-auto px-4 pt-3 pb-12">

@@ -1,19 +1,25 @@
 import {
   Swords,
-  Info,Volume2,
-  VolumeX
+  Info,
+  Volume2,
+  VolumeX,
+  RefreshCw
 } from 'lucide-react';
 
 interface HeaderProps {
   onOpenTheoryModal: () => void;
   isMuted?: boolean;
   toggleSound: () => void;
+  isStarted: boolean;
+  handleResetApp: () => void;
 }
 
 export function Header({
   onOpenTheoryModal,
   isMuted = false,
   toggleSound,
+  isStarted,
+  handleResetApp
 }: HeaderProps) {
   return (
     <header className="w-full border-b border-neutral-900 bg-neutral-950/80 backdrop-blur-md sticky top-0 z-50">
@@ -48,7 +54,19 @@ export function Header({
             {isMuted ? <VolumeX className="w-4 h-4 text-neutral-500" /> : <Volume2 className="w-4 h-4 text-teal-400" />}
           </button>
 
-          {/* TODO: Quick reset button */}
+          {/* Quick reset button */}
+          {isStarted && (
+            <button
+              id="header-restart-btn"
+              onClick={handleResetApp}
+              title="Restart demo with full battery"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-pixel text-neutral-400 hover:text-neutral-200 bg-neutral-900 hover:bg-neutral-850 rounded-xl border border-neutral-800 transition-colors cursor-pointer"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">Reset</span>
+            </button>
+          )}
+
           {/* Spoon Theory info */}
           <button
             id="spoon-theory-info-btn"

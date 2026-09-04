@@ -4,6 +4,9 @@
 [![Hackathon](https://img.shields.io/badge/Hack%20for%20Humanity-Summer%202026-teal)](https://hack-for-humanity-summer-26.devpost.com/)
 [![Powered by](https://img.shields.io/badge/Google%20Gemini-Function%20Calling-blue)](https://aistudio.google.com/)
 [![Track](https://img.shields.io/badge/Tracks-Mental%20Health%20%7C%20Concussion%20Recovery%20%7C%20Responsible%20AI-emerald)](#)
+[![Built with](https://img.shields.io/badge/Built%20with-Google%20Antigravity-4285F4?logo=google&logoColor=white)](#)
+[![Prototyped in](https://img.shields.io/badge/Prototyped%20in-Google%20AI%20Studio-EA4335?logo=google&logoColor=white)](https://aistudio.google.com/)
+[![Deploy](https://img.shields.io/badge/Live%20Demo-Render-46E3B7?logo=render&logoColor=black)](https://spoon-step.onrender.com/)
 
 ---
 
@@ -47,9 +50,11 @@ Instead of a long, terrifying to-do list, SpoonStep gives you **strictly ONE phy
 ---
 
 ## 🛠️ Tech Stack & Architecture
+* **AI Prototyping & Development**: Google AI Studio & Google Antigravity IDE
+* **AI Engine & Function Calling**: Google Gemini (`gemini-3.8-flash`) via Google GenAI SDK (`@google/genai`)
+* **Hosting & CI/CD**: Render (1-click Blueprint with `render.yaml`)
 * **Frontend**: React 19, TypeScript, Vite, Tailwind CSS
 * **Animations & Micro-interactions**: Framer Motion (`motion/react`)
-* **AI Orchestration**: Google GenAI SDK (`@google/genai`) with Gemini Function Calling (`gemini-3.8-flash`)
 * **Audio Synthesis**: Native Web Audio API (custom 8-bit chiptune sound generator, zero external audio assets)
 * **Icons**: Lucide React
 

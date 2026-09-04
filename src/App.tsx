@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { SpoonTheoryModal } from './components/SpoonTheoryModal';
+import { ApiKeyModal } from './components/ApiKeyModal';
 import { ActionManager } from './components/ActionManager.tsx';
 import { BrainBattery } from './components/BrainBattery.tsx';
 import { EphemeralConfessional } from './components/EphemeralConfessional.tsx';
 import { CognitiveRest } from './components/CognitiveRest.tsx';
 import type { AppState, GamePlayerStats, FloatingReward } from './types';
 import { soundFx } from './services/soundFx';
-import { decomposeTaskWithGemini } from './services/gemini';
+import { decomposeTaskWithGemini, getGeminiApiKey } from './services/gemini';
 import { AnimatePresence, motion } from 'motion/react';
 
 const STORAGE_KEY = 'spoon_quest_session';
@@ -34,6 +35,7 @@ function App() {
   const [questSteps, setQuestSteps] = useState<string[]>([]);
 
   const [showTheoryModal, setShowTheoryModal] = useState<boolean>(false);
+  const [showApiKeyModal, setShowApiKeyModal] = useState<boolean>(false);
 
   // 1. Load state from localStorage
   useEffect(() => {
@@ -118,6 +120,11 @@ function App() {
 
   // Start micro-tasking / quest
   const handleStartTask = async (task: string) => {
+    if (!getGeminiApiKey()) {
+      setShowApiKeyModal(true);
+      return;
+    }
+
     soundFx.playQuestStart();
     setTaskName(task);
     setIsStarted(true);
@@ -215,6 +222,7 @@ function App() {
     <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col justify-between selection:bg-teal-500/30 selection:text-teal-200">
       <Header
         onOpenTheoryModal={() => setShowTheoryModal(true)}
+        onOpenApiKeyModal={() => setShowApiKeyModal(true)}
         toggleSound={toggleSound}
         isMuted={isMuted}
         isStarted={isStarted}
@@ -299,6 +307,11 @@ function App() {
       <SpoonTheoryModal
         isOpen={showTheoryModal}
         onClose={() => setShowTheoryModal(false)}
+      />
+
+      <ApiKeyModal
+        isOpen={showApiKeyModal}
+        onClose={() => setShowApiKeyModal(false)}
       />
     </div>
   )

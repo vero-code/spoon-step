@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Utensils, Shield, Flame } from 'lucide-react';
+import { Sparkles, Shield, Flame } from 'lucide-react';
 import type { GamePlayerStats } from '../types';
 
 interface BrainBatteryProps {

@@ -1,13 +1,15 @@
 import {
-  Swords,
   Info,
   Volume2,
   VolumeX,
-  RefreshCw
+  RefreshCw,
+  Key,
 } from 'lucide-react';
+import { getGeminiApiKey } from '../services/gemini';
 
 interface HeaderProps {
   onOpenTheoryModal: () => void;
+  onOpenApiKeyModal: () => void;
   isMuted?: boolean;
   toggleSound: () => void;
   isStarted: boolean;
@@ -16,11 +18,13 @@ interface HeaderProps {
 
 export function Header({
   onOpenTheoryModal,
+  onOpenApiKeyModal,
   isMuted = false,
   toggleSound,
   isStarted,
   handleResetApp
 }: HeaderProps) {
+  const hasApiKey = Boolean(getGeminiApiKey());
   return (
     <header className="w-full border-b border-neutral-900 bg-neutral-950/80 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-4xl mx-auto px-4 py-2.5 flex items-center justify-between">
@@ -46,7 +50,21 @@ export function Header({
         </div>
 
         <div className="flex items-center gap-2">
-          {/* TODO: API Key */}
+          {/* Gemini API Key Button */}
+          <button
+            id="api-key-modal-btn"
+            onClick={onOpenApiKeyModal}
+            title="Configure Gemini API Key"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-pixel text-neutral-300 hover:text-teal-300 bg-neutral-900 hover:bg-neutral-850 rounded-xl border border-neutral-800 transition-colors cursor-pointer"
+          >
+            <Key className="w-3.5 h-3.5 text-teal-400" />
+            <span className="hidden sm:inline">API Key</span>
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${
+                hasApiKey ? 'bg-emerald-400' : 'bg-amber-400'
+              }`}
+            />
+          </button>
 
           {/* Audio Sfx Toggle */}
           <button

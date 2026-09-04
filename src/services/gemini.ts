@@ -1,6 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
 
-// 1. API Key accessor
+// 1. API Key accessor & storage helpers
 export function getGeminiApiKey(): string {
   const envKey = import.meta.env.VITE_GEMINI_API_KEY;
   if (envKey && typeof envKey === 'string' && envKey.trim()) {
@@ -11,6 +11,29 @@ export function getGeminiApiKey(): string {
     if (stored) return stored.trim();
   }
   return '';
+}
+
+export function getCustomApiKey(): string {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('spoon_gemini_api_key') || '';
+  }
+  return '';
+}
+
+export function setStoredGeminiApiKey(key: string): void {
+  if (typeof window !== 'undefined') {
+    if (key.trim()) {
+      localStorage.setItem('spoon_gemini_api_key', key.trim());
+    } else {
+      localStorage.removeItem('spoon_gemini_api_key');
+    }
+  }
+}
+
+export function removeStoredGeminiApiKey(): void {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('spoon_gemini_api_key');
+  }
 }
 
 // -------------------------------------------------------------

@@ -13,7 +13,9 @@
 ## 📺 Video demo link
 [![SpoonStep Video Walkthrough](https://img.youtube.com/vi/OfgZLkfDLuE/hqdefault.jpg)](https://youtu.be/OfgZLkfDLuE)
 
-> 🎬 **Watch the video [walkthrough](https://youtu.be/OfgZLkfDLuE) 👆**
+> 🎬 **Watch the video** [walkthrough](https://youtu.be/OfgZLkfDLuE) 👆
+
+> 🏆 **Devpost Submission**: [devpost.com/software/spoonstep](https://devpost.com/software/spoonstep)
 
 ---
 

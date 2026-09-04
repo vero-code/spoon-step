@@ -5,11 +5,13 @@ import { SpoonTheoryModal } from './components/SpoonTheoryModal';
 import { ActionManager } from './components/ActionManager.tsx';
 import { BrainBattery } from './components/BrainBattery.tsx';
 import type { AppState } from './types';
+import { soundFx } from './services/soundFx';
 import { AnimatePresence, motion } from 'motion/react';
 
 function App() {
   const [appState, setAppState] = useState<AppState>('ACTION');
   const [battery, setBattery] = useState<number>(100);
+  const [isMuted, setIsMuted] = useState<boolean>(false);
 
   // Task session state
   const [isStarted, setIsStarted] = useState<boolean>(false);
@@ -20,8 +22,15 @@ function App() {
 
   const [showTheoryModal, setShowTheoryModal] = useState<boolean>(false);
 
+  const toggleSound = () => {
+    const nextState = !isMuted;
+    setIsMuted(nextState);
+    soundFx.isMuted = nextState;
+  };
+
   // Start micro-tasking / quest
   const handleStartTask = async (task: string) => {
+    soundFx.playQuestStart();
     setTaskName(task);
     setIsStarted(true);
     setStepIndex(0);
@@ -32,7 +41,11 @@ function App() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col justify-between selection:bg-teal-500/30 selection:text-teal-200">
-      <Header onOpenTheoryModal={() => setShowTheoryModal(true)} />
+      <Header
+        onOpenTheoryModal={() => setShowTheoryModal(true)}
+        toggleSound={toggleSound}
+        isMuted={isMuted}
+      />
 
       <main className="flex-1 flex flex-col justify-start w-full max-w-4xl mx-auto px-4 pt-3 pb-12">
         <BrainBattery 

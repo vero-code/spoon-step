@@ -1,10 +1,20 @@
-import { Swords, Info } from 'lucide-react';
+import {
+  Swords,
+  Info,Volume2,
+  VolumeX
+} from 'lucide-react';
 
 interface HeaderProps {
   onOpenTheoryModal: () => void;
+  isMuted?: boolean;
+  toggleSound: () => void;
 }
 
-export function Header({ onOpenTheoryModal }: HeaderProps) {
+export function Header({
+  onOpenTheoryModal,
+  isMuted = false,
+  toggleSound,
+}: HeaderProps) {
   return (
     <header className="w-full border-b border-neutral-900 bg-neutral-950/80 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-4xl mx-auto px-4 py-2.5 flex items-center justify-between">
@@ -26,10 +36,20 @@ export function Header({ onOpenTheoryModal }: HeaderProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          {/* TODO: Audio Sfx Toggle */}
-          {/* TODO: Quick reset button */}
+          {/* TODO: API Key */}
 
-          {/* TODO: Spoon Theory info */}
+          {/* Audio Sfx Toggle */}
+          <button
+            id="audio-toggle-btn"
+            onClick={toggleSound}
+            title={isMuted ? 'Enable 8-bit sound' : 'Mute sound effects'}
+            className="p-2 text-neutral-400 hover:text-neutral-200 bg-neutral-900 hover:bg-neutral-850 rounded-xl border border-neutral-800 transition-colors cursor-pointer"
+          >
+            {isMuted ? <VolumeX className="w-4 h-4 text-neutral-500" /> : <Volume2 className="w-4 h-4 text-teal-400" />}
+          </button>
+
+          {/* TODO: Quick reset button */}
+          {/* Spoon Theory info */}
           <button
             id="spoon-theory-info-btn"
             onClick={onOpenTheoryModal}

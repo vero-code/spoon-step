@@ -26,7 +26,11 @@ export function Header({
       <div className="max-w-4xl mx-auto px-4 py-2.5 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-teal-500 to-emerald-400 flex items-center justify-center text-neutral-950 font-bold shadow-md shadow-teal-500/20">
-            <Swords className="w-4 h-4 text-neutral-950 stroke-[2.5]" />
+            <img
+              src="/favicon.svg"
+              alt="SpoonStep Logo"
+              className="w-8 h-8 rounded-xl shadow-md shadow-teal-500/30 object-contain hover:scale-105 transition-transform"
+            />
           </div>
           <div>
             <div className="flex items-center gap-1.5">

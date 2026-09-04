@@ -87,28 +87,49 @@ export async function runSpoonStepAgent(userInput: string): Promise<AgentRespons
     tools: SPOON_STEP_TOOLS,
   });
 
-  if (interaction?.steps) {
+    if (interaction?.steps) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     for (const step of interaction.steps) {
       if (step.type === 'function_call') {
+        // Parse arguments if Gemini returned them as a JSON string
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let rawArgs: any = step.arguments;
+        if (typeof rawArgs === 'string') {
+          try {
+            rawArgs = JSON.parse(rawArgs);
+          } catch (e) {
+            throw new Error(`Failed to parse tool arguments JSON: ${rawArgs}`);
+          }
+        }
+
         if (step.name === 'decompose_task') {
-          const args = step.arguments as { steps?: string[] };
-          const steps = (args.steps || []).map((s) => String(s).trim()).filter(Boolean);
+          const list = Array.isArray(rawArgs)
+            ? rawArgs
+            : rawArgs.steps || rawArgs.micro_steps || rawArgs.items || [];
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const steps = list.map((s: any) => String(s).trim()).filter(Boolean);
           console.log('🤖 [Agent invoked Tool: decompose_task]:', steps);
-          return { toolCalled: 'decompose_task', steps };
+
+          if (steps.length > 0) {
+            return { toolCalled: 'decompose_task', steps };
+          }
+          throw new Error(`Tool decompose_task was called, but steps array is empty: ${JSON.stringify(rawArgs)}`);
         }
 
         if (step.name === 'comfort_user') {
-          const args = step.arguments as { comfort_message?: string };
-          const msg = (args.comfort_message || '').trim();
+          const msg = (rawArgs.comfort_message || rawArgs.message || '').trim();
           console.log('🤖 [Agent invoked Tool: comfort_user]:', msg);
-          return { toolCalled: 'comfort_user', comfortMessage: msg };
+
+          if (msg) {
+            return { toolCalled: 'comfort_user', comfortMessage: msg };
+          }
+          throw new Error(`Tool comfort_user was called, but message is empty: ${JSON.stringify(rawArgs)}`);
         }
       }
     }
   }
 
-  throw new Error('Agent did not call any tools.');
+  throw new Error('Agent did not call any tools. Raw response: ' + JSON.stringify(interaction?.steps || interaction));
 }
 
 // -------------------------------------------------------------
@@ -117,25 +138,24 @@ export async function runSpoonStepAgent(userInput: string): Promise<AgentRespons
 
 export async function decomposeTaskWithGemini(taskName: string): Promise<string[]> {
   const result = await runSpoonStepAgent(
-    `The user feels paralyzed by this task: "${taskName}". Break it down into single physical movements.`
+    `Please call the decompose_task tool to break down this task: "${taskName}" into 5 to 8 single, atomic, low-cognitive-load physical movements. Do NOT call comfort_user.`
   );
-  if (result.steps && result.steps.length > 0) {
+
+  if (result.toolCalled === 'decompose_task' && result.steps && result.steps.length > 0) {
     return result.steps;
   }
-  throw new Error('Failed to decompose task');
+
+  throw new Error(`Agent called "${result.toolCalled}" instead of decompose_task.`);
 }
 
 export async function fetchComfortingResponse(ventText: string): Promise<string> {
-  try {
-    const result = await runSpoonStepAgent(
-      `The user feels burned out and just vented: "${ventText}". Hold space and comfort them.`
-    );
-    if (result.comfortMessage) {
-      return result.comfortMessage;
-    }
-  } catch (error) {
-    console.warn('⚠️ Agent comfort fallback:', error);
+  const result = await runSpoonStepAgent(
+    `The user is exhausted/overwhelmed and vented: "${ventText}". Call comfort_user to hold space and give them validation. Do NOT call decompose_task.`
+  );
+
+  if (result.toolCalled === 'comfort_user' && result.comfortMessage) {
+    return result.comfortMessage;
   }
 
-  throw new Error('Failed to get comforting response.');
+  throw new Error(`Agent called "${result.toolCalled}" instead of comfort_user.`);
 }

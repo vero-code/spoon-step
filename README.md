@@ -1,23 +1,20 @@
 # 🥄 SpoonStep
 > **Gamified Cognitive Scaffold & Energy Pacing AI for ADHD, Burnout, and Concussion Recovery.**
 
-[![Hackathon](https://img.shields.io/badge/Hack%20for%20Humanity-Summer%202026-teal)](https://hack-for-humanity-summer-26.devpost.com/)
-[![Powered by](https://img.shields.io/badge/Google%20Gemini-Function%20Calling-blue)](https://aistudio.google.com/)
-[![Track](https://img.shields.io/badge/Tracks-Mental%20Health%20%7C%20Concussion%20Recovery%20%7C%20Responsible%20AI-emerald)](#)
-[![Built with](https://img.shields.io/badge/Built%20with-Google%20Antigravity-4285F4?logo=google&logoColor=white)](#)
+[![Winner](https://img.shields.io/badge/Hack%20for%20Humanity%202026-Winner%20🏆-gold)](https://devpost.com/software/spoonstep)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-46E3B7?logo=render&logoColor=black)](https://spoon-step.onrender.com/)
+[![Model](https://img.shields.io/badge/Model-Google%20Gemini-8E75C2?logo=googlegemini&logoColor=white)](https://ai.google.dev/gemini-api/docs)
 [![Prototyped in](https://img.shields.io/badge/Prototyped%20in-Google%20AI%20Studio-EA4335?logo=google&logoColor=white)](https://aistudio.google.com/)
-[![Deploy](https://img.shields.io/badge/Live%20Demo-Render-46E3B7?logo=render&logoColor=black)](https://spoon-step.onrender.com/)
+[![Built with](https://img.shields.io/badge/Built%20with-Google%20Antigravity-4285F4?logo=google&logoColor=white)](https://antigravity.google/)
+[![Track](https://img.shields.io/badge/Tracks-Mental%20Health%20%7C%20Concussion%20Recovery%20%7C%20Responsible%20AI-emerald)](https://hack-for-humanity-summer-26.devpost.com/)
 
----
+
+> 🏆 **Winner** at Hack for Humanity | Summer 2026 (1,350+ participants) — [Devpost Submission](https://devpost.com/software/spoonstep)
 
 ## 📺 Video demo link
 [![SpoonStep Video Walkthrough](https://img.youtube.com/vi/OfgZLkfDLuE/hqdefault.jpg)](https://youtu.be/OfgZLkfDLuE)
 
 > 🎬 **Watch the video** [walkthrough](https://youtu.be/OfgZLkfDLuE) 👆
-
-> 🏆 **Devpost Submission**: [devpost.com/software/spoonstep](https://devpost.com/software/spoonstep)
-
----
 
 ## 💡 The Problem
 * **Executive Dysfunction & ADHD Paralysis**: Staring at a long to-do list triggers cognitive freeze, overwhelm, and shame spirals.
@@ -136,6 +133,10 @@ Click the **🔑 API Key** button in the header (or simply start any micro-quest
 | **Concussion Recovery** | Enforces cognitive pacing, finite spoon budget, box breathing, and mandatory screen-break rest. |
 | **Responsible AI** | 8-second ephemeral memory dissolution, BYOK architecture, zero third-party health tracking. |
 | **UI/UX & Accessibility** | High-contrast dark theme, low visual clutter, large legible typography, and playful retro-RPG delight. |
+
+## 🏆 Recognition
+
+- **Winner** at [Hack for Humanity | Summer 2026](https://hack-for-humanity-summer-26.devpost.com/) (selected among **1,350+ participants**) in the *AI for Mental/Physical Health & Concussion Recovery* challenge.
 
 ---
 
